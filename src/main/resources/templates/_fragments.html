@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head></head>
+<body>
+<!-- Navbar Fragment -->
+<div th:fragment="navbar">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">EDUAWARDS</a>
+
+            <!-- Toggler for mobile view -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Navbar Links -->
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                <ul class="navbar-nav ms-auto">
+
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/home">Home</a>
+                    </li>
+
+                    <!-- Reference Dropdown -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="referenceDropdown" role="button"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            Reference
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="referenceDropdown">
+                            <li><a class="dropdown-item" href="/year-details">Year Details</a></li>
+                            <li><a class="dropdown-item" href="/semester-details">Semester Details</a></li>
+                            <li><a class="dropdown-item" href="/semester-holidays">Semester Holidays</a></li>
+                        </ul>
+                    </li>
+
+                    <!-- Student Dropdown -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="studentDropdown" role="button"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            Student
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="studentDropdown">
+                            <li><a class="dropdown-item" href="/student-info">Student Info</a></li>
+                            <li><a class="dropdown-item" href="/student-enrollment">Student Enrollment</a></li>
+                            <li><a class="dropdown-item" href="/student-results">Student Results</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="/profile">Profile</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="/settings">Settings</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="/logout">Logout</a>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+</div>
+</body>
+</html>
