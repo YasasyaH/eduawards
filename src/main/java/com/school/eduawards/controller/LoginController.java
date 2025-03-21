@@ -11,6 +11,7 @@ public class LoginController {
         return "login";
     }
 
+
     @PostMapping("/login")
     public String authenticate() {
         return "home";
