@@ -2,9 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Semester Details</title>
-
-    <!-- Bootstrap CSS -->
+    <title>Semester Holidays</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <style>
@@ -20,16 +18,17 @@
 <body>
 
 <div th:replace="~{_fragments :: navbar}"></div>
+
 <!-- Page Content -->
 <div class="container content">
-    <h2 class="mb-4">Semester Details</h2>
+    <h2 class="mb-4">Semester Holiday</h2>
 
     <div class="card form-section">
         <div class="card-header bg-primary text-white">
-            <h5 th:text="${semesterDetails.id} != null ? 'Edit Semester Details' : 'Add Semester Details'"></h5>
+            <h5 th:text="${semesterHoliday.id} != null ? 'Edit Semester Holiday' : 'Add Semester Holiday'"></h5>
         </div>
         <div class="card-body">
-            <form th:action="@{/semester-details/save}" th:object="${semesterDetails}" method="post">
+            <form th:action="@{/semester-holidays/save}" th:object="${semesterHoliday}" method="post">
                 <input type="hidden" th:field="*{id}" />
 
                 <!-- Year Dropdown -->
@@ -41,7 +40,16 @@
                     </select>
                 </div>
 
-                <!-- Start Date and End Date -->
+                <!-- Semester Dropdown -->
+                <div class="mb-3">
+                    <label for="semesterDetails" class="form-label">Semester</label>
+                    <select th:field="*{semesterDetails}" class="form-select" id="semesterDetails" required>
+                        <option value="" disabled selected>-- Select Semester --</option>
+                        <option th:each="sem : ${semesterDetailsList}" th:value="${sem.id}" th:text="${sem.description} + ' (' + ${sem.startDate} + ' - ' + ${sem.endDate} + ')'"></option>
+                    </select>
+                </div>
+
+                <!-- Dates -->
                 <div class="row mb-3">
                     <div class="col-md-6">
                         <label for="startDate" class="form-label">Start Date</label>
@@ -70,18 +78,19 @@
                 </div>
 
                 <button type="submit" class="btn btn-success">Save</button>
-                <a href="/semester-details" class="btn btn-secondary">Cancel</a>
+                <a href="/semester-holidays" class="btn btn-secondary">Cancel</a>
             </form>
         </div>
     </div>
 
-    <!-- Display Existing Semester Records -->
-    <h2>Existing Semester Details</h2>
+    <!-- Table of existing semester holidays -->
+    <h2>Existing Semester Holidays</h2>
     <table class="table table-bordered">
         <thead>
         <tr>
             <th>ID</th>
             <th>Year</th>
+            <th>Semester</th>
             <th>Start Date</th>
             <th>End Date</th>
             <th>Description</th>
@@ -90,23 +99,23 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="semester : ${semesterDetailsList}">
-            <td th:text="${semester.id}"></td>
-            <td th:text="${semester.yearDetails.startDate} + ' - ' + ${semester.yearDetails.endDate}"></td>
-            <td th:text="${semester.startDate}"></td>
-            <td th:text="${semester.endDate}"></td>
-            <td th:text="${semester.description}"></td>
-            <td th:text="${semester.status}"></td>
+        <tr th:each="holiday : ${semesterHolidayList}">
+            <td th:text="${holiday.id}"></td>
+            <td th:text="${holiday.yearDetails.startDate} + ' - ' + ${holiday.yearDetails.endDate}"></td>
+            <td th:text="${holiday.semesterDetails.description} + ' (' + ${holiday.semesterDetails.startDate} + ' - ' + ${holiday.semesterDetails.endDate} + ')'"></td>
+            <td th:text="${holiday.startDate}"></td>
+            <td th:text="${holiday.endDate}"></td>
+            <td th:text="${holiday.description}"></td>
+            <td th:text="${holiday.status}"></td>
             <td>
-                <a th:href="@{/semester-details/edit/{id}(id=${semester.id})}" class="btn btn-warning">Edit</a>
-                <a th:href="@{/semester-details/delete/{id}(id=${semester.id})}" class="btn btn-danger">Delete</a>
+                <a th:href="@{/semester-holidays/edit/{id}(id=${holiday.id})}" class="btn btn-warning">Edit</a>
+                <a th:href="@{/semester-holidays/delete/{id}(id=${holiday.id})}" class="btn btn-danger">Delete</a>
             </td>
         </tr>
         </tbody>
     </table>
 </div>
 
-<!-- Bootstrap JS Bundle (required for toggler menu in mobile view) -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>

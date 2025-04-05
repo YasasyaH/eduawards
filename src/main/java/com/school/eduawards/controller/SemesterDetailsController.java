@@ -1,6 +1,7 @@
 package com.school.eduawards.controller;
 
 import com.school.eduawards.entity.SemesterDetails;
+import com.school.eduawards.entity.YearDetails;
 import com.school.eduawards.service.SemesterDetailsService;
 import com.school.eduawards.service.YearDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +40,7 @@ public class SemesterDetailsController {
 
     @GetMapping
     public String listSemesterDetails(Model model) {
+        model.addAttribute("semesterDetails", new SemesterDetails());
         model.addAttribute("semesterDetailsList", semesterDetailsService.getAll());
         model.addAttribute("years", yearDetailsService.getAll()); // Fetch list of years for the dropdown
         return "semester-details-form"; // Return the same view with data
