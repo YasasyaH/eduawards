@@ -26,7 +26,7 @@ public class UserController {
         List<User> list = userService.getAll();
         List<UserGroup> userGroupList = userGroupService.getAll();
         model.addAttribute("userList", list);
-        model.addAttribute("3", userGroupList);
+        model.addAttribute("userGroupList", userGroupList);
         model.addAttribute("user", new User());
         return "user-form";
     }

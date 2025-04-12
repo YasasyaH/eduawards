@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Student Form</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body>
+
+<div class="container mt-5">
+    <h2 th:text="${student.id} != null ? 'Edit Student' : 'Add New Student'"></h2>
+
+    <form th:action="@{/student/save}" th:object="${student}" method="post">
+        <input type="hidden" th:field="*{id}" />
+
+        <!-- Full Name -->
+        <div class="mb-3">
+            <label for="fullName" class="form-label">Full Name</label>
+            <input type="text" th:field="*{fullName}" class="form-control" required />
+        </div>
+
+        <!-- Name With Initials -->
+        <div class="mb-3">
+            <label for="nameWithInitials" class="form-label">Name With Initials</label>
+            <input type="text" th:field="*{nameWithInitials}" class="form-control" required />
+        </div>
+
+        <!-- Registration No -->
+        <div class="mb-3">
+            <label for="registrationNo" class="form-label">Registration No</label>
+            <input type="text" th:field="*{registrationNo}" class="form-control" required />
+        </div>
+
+        <!-- Parent Details -->
+        <div class="mb-3">
+            <label for="fatherName" class="form-label">Father's Name</label>
+            <input type="text" th:field="*{fatherName}" class="form-control" />
+        </div>
+
+        <div class="mb-3">
+            <label for="fatherContact" class="form-label">Father's Contact</label>
+            <input type="text" th:field="*{fatherContact}" class="form-control" />
+        </div>
+
+        <div class="mb-3">
+            <label for="motherName" class="form-label">Mother's Name</label>
+            <input type="text" th:field="*{motherName}" class="form-control" />
+        </div>
+
+        <div class="mb-3">
+            <label for="motherContact" class="form-label">Mother's Contact</label>
+            <input type="text" th:field="*{motherContact}" class="form-control" />
+        </div>
+
+        <div class="mb-3">
+            <label for="homeContact" class="form-label">Home Contact</label>
+            <input type="text" th:field="*{homeContact}" class="form-control" />
+        </div>
+
+        <!-- Status -->
+        <div class="mb-3">
+            <label for="status" class="form-label">Status</label>
+            <select th:field="*{status}" class="form-select" required>
+                <option value="">-- Select Status --</option>
+                <option value="Active">Active</option>
+                <option value="Inactive">Inactive</option>
+            </select>
+        </div>
+
+        <!-- Addresses Section -->
+        <hr/>
+        <h4>Student Addresses</h4>
+        <div id="address-list" th:fragment="address-list">
+            <div th:each="addr, iterStat : *{studentAddresses}" class="address-block border rounded p-3 mb-3">
+                <input type="hidden" th:field="*{studentAddresses[__${iterStat.index}__].id}" />
+
+                <div class="mb-2">
+                    <label>Address Type</label>
+                    <input type="text" th:field="*{studentAddresses[__${iterStat.index}__].addressType}" class="form-control" />
+                </div>
+
+                <div class="mb-2">
+                    <label>Address Line 1</label>
+                    <input type="text" th:field="*{studentAddresses[__${iterStat.index}__].addressLine1}" class="form-control" />
+                </div>
+
+                <div class="mb-2">
+                    <label>Address Line 2</label>
+                    <input type="text" th:field="*{studentAddresses[__${iterStat.index}__].addressLine2}" class="form-control" />
+                </div>
+
+                <div class="mb-2">
+                    <label>Address Line 3</label>
+                    <input type="text" th:field="*{studentAddresses[__${iterStat.index}__].addressLine3}" class="form-control" />
+                </div>
+
+                <div class="mb-2">
+                    <label>Address Line 4</label>
+                    <input type="text" th:field="*{studentAddresses[__${iterStat.index}__].addressLine4}" class="form-control" />
+                </div>
+
+                <button type="button" class="btn btn-danger btn-sm" onclick="removeAddress(this)">Remove</button>
+            </div>
+        </div>
+
+        <button type="button" class="btn btn-secondary mb-3" onclick="addAddress()">Add Address</button>
+
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a th:href="@{/student}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+
+<script>
+    function addAddress() {
+        const container = document.getElementById('address-list');
+        const count = container.querySelectorAll('.address-block').length;
+
+        const template = `
+        <div class="address-block border rounded p-3 mb-3">
+            <input type="hidden" name="studentAddresses[${count}].id" />
+
+            <div class="mb-2">
+                <label>Address Type</label>
+                <input type="text" name="studentAddresses[${count}].addressType" class="form-control" />
+            </div>
+
+            <div class="mb-2">
+                <label>Address Line 1</label>
+                <input type="text" name="studentAddresses[${count}].addressLine1" class="form-control" />
+            </div>
+
+            <div class="mb-2">
+                <label>Address Line 2</label>
+                <input type="text" name="studentAddresses[${count}].addressLine2" class="form-control" />
+            </div>
+
+            <div class="mb-2">
+                <label>Address Line 3</label>
+                <input type="text" name="studentAddresses[${count}].addressLine3" class="form-control" />
+            </div>
+
+            <div class="mb-2">
+                <label>Address Line 4</label>
+                <input type="text" name="studentAddresses[${count}].addressLine4" class="form-control" />
+            </div>
+
+            <button type="button" class="btn btn-danger btn-sm" onclick="removeAddress(this)">Remove</button>
+        </div>
+        `;
+        container.insertAdjacentHTML('beforeend', template);
+    }
+
+    function removeAddress(btn) {
+        const block = btn.closest('.address-block');
+        block.remove();
+    }
+</script>
+
+</body>
+</html>
