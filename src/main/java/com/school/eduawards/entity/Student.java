@@ -35,6 +35,8 @@ public class Student {
     private String motherContact;
     private String homeContact;
     private String status;
+    private int currentYear;
+    private String currentClass;
 
     @Column(name = "enter_date")
     private LocalDateTime enterDate;
