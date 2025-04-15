@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Student Marks Entry</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    body {
+        background-color: #f8f9fa;
+    }
+    .form-section {
+        margin-bottom: 50px;
+    }
+    .action-buttons {
+        display: flex;
+        gap: 10px;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<div th:replace="~{_fragments :: navbar}"></div>
+
+<div class="container mt-5">
+  <h2 class="mb-4">Student Marks Entry</h2>
+
+  <!-- Form Section -->
+  <div class="card form-section">
+    <div class="card-header bg-primary text-white">
+      <h5 th:text="${studentMarks.id} != null ? 'Edit Student Marks' : 'Add Student Marks'"></h5>
+    </div>
+    <div class="card-body">
+      <form th:action="@{/marks/save}" th:object="${studentMarks}" method="post">
+        <input type="hidden" th:field="*{id}" />
+
+        <!-- Student Search -->
+        <div class="mb-3">
+          <label for="studentName" class="form-label">Student</label>
+          <div class="input-group">
+            <input type="text" class="form-control" id="studentName" readonly th:field="*{student.fullName}" />
+            <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#studentSearchModal">Search</button>
+          </div>
+        </div>
+
+        <!-- Read-only Info -->
+        <div class="mb-3">
+          <label for="registrationNo" class="form-label">Registration No</label>
+          <input type="text" class="form-control" id="registrationNo" readonly />
+        </div>
+        <div class="mb-3">
+          <label for="fullName" class="form-label">Full Name</label>
+          <input type="text" class="form-control" id="fullName" readonly />
+        </div>
+
+        <!-- Year Dropdown -->
+        <div class="mb-3">
+          <label for="yearDetails" class="form-label">Year</label>
+          <select class="form-select" id="yearDetails" th:field="*{yearDetails.id}">
+            <option value="">-- Select Year --</option>
+            <option th:each="year : ${yearList}"
+                    th:value="${year.id}"
+                    th:text="${#temporals.format(year.startDate, 'yyyy-MM-dd') + ' to ' + #temporals.format(year.endDate, 'yyyy-MM-dd')}">
+            </option>
+          </select>
+        </div>
+
+        <!-- Semester Dropdown -->
+        <div class="mb-3">
+          <label for="semesterDetails" class="form-label">Semester</label>
+          <select class="form-select" id="semesterDetails" th:field="*{semesterDetails.id}">
+            <option value="">-- Select Semester --</option>
+            <option th:each="sem : ${semesterList}"
+                    th:value="${sem.id}"
+                    th:text="${#temporals.format(sem.startDate, 'yyyy-MM-dd') + ' to ' + #temporals.format(sem.endDate, 'yyyy-MM-dd')}">
+            </option>
+          </select>
+        </div>
+
+        <!-- Marks Input -->
+        <div class="mb-3">
+          <label class="form-label">English</label>
+          <input type="number" class="form-control" th:field="*{english}" min="0" max="100" />
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Maths</label>
+          <input type="number" class="form-control" th:field="*{maths}" min="0" max="100" />
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Science</label>
+          <input type="number" class="form-control" th:field="*{science}" min="0" max="100" />
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Computer</label>
+          <input type="number" class="form-control" th:field="*{computer}" min="0" max="100" />
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Social Studies</label>
+          <input type="number" class="form-control" th:field="*{socialStudies}" min="0" max="100" />
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Sinhala</label>
+          <input type="text" class="form-control" th:field="*{sinhala}" />
+        </div>
+
+        <button type="submit" class="btn btn-success">Save</button>
+        <a href="/marks" class="btn btn-secondary">Cancel</a>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="studentSearchModal" tabindex="-1" aria-labelledby="studentSearchModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Search Student</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <input type="text" class="form-control mb-2" id="studentSearchInput" placeholder="Search by name..." />
+        <table class="table table-bordered table-striped">
+          <thead>
+          <tr>
+            <th>Full Name</th>
+            <th>Registration No</th>
+            <th>Action</th>
+          </tr>
+          </thead>
+          <tbody id="studentResults">
+          <!-- Populated by JS -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  $('#studentSearchInput').on('keyup', function () {
+      const keyword = $(this).val();
+      if (keyword.length >= 2) {
+          $.get('/students/search', { name: keyword }, function (data) {
+              let rows = '';
+              data.forEach(s => {
+                  rows += `
+                      <tr>
+                          <td>${s.fullName}</td>
+                          <td>${s.registrationNo}</td>
+                          <td><button type="button" class="btn btn-sm btn-success" onclick='selectStudent(${JSON.stringify(s)})'>Select</button></td>
+                      </tr>`;
+              });
+              $('#studentResults').html(rows);
+          });
+      }
+  });
+
+  function selectStudent(student) {
+      $('#studentName').val(student.fullName);
+      $('#registrationNo').val(student.registrationNo);
+      $('#fatherName').val(student.fatherName);
+
+      // Hidden field for student ID
+      $('<input>').attr({
+          type: 'hidden',
+          name: 'student.id',
+          value: student.id
+      }).appendTo('form');
+
+      const modal = bootstrap.Modal.getInstance(document.getElementById('studentSearchModal'));
+      modal.hide();
+  }
+</script>
+</body>
+</html>
