@@ -27,4 +27,8 @@ public class StudentService {
     public void delete(Integer id) {
         repository.deleteById(id);
     }
+
+    public List<Student> findByYearAndClass(int year, String className) {
+        return repository.findByCurrentYearAndCurrentClass(year, className);
+    }
 }

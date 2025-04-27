@@ -37,9 +37,9 @@ public class StudentController {
 
     @PostMapping("/save")
     public String saveUser(@ModelAttribute("student") Student student) {
-        if (student.getId() == null) {
-            student.setEnterDate(LocalDateTime.now());
-            student.setEnterUser("admin");
+        if (student.getId() == 0){
+           student.setEnterDate(LocalDateTime.now());
+           student.setEnterUser("admin");
         }
         studentService.save(student);
         return "redirect:/student";
