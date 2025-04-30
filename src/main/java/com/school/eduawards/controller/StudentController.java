@@ -37,10 +37,10 @@ public class StudentController {
 
     @PostMapping("/save")
     public String saveUser(@ModelAttribute("student") Student student) {
-        if (student.getId() == 0){
+        //if (student.getId() == 0){
            student.setEnterDate(LocalDateTime.now());
            student.setEnterUser("admin");
-        }
+        //}
         studentService.save(student);
         return "redirect:/student";
     }
@@ -64,6 +64,12 @@ public class StudentController {
     public String deleteStudent(@PathVariable("id") Integer id) {
         studentService.delete(id);
         return "redirect:/student";
+    }
+
+    @GetMapping("/search")
+    @ResponseBody
+    public List<Student> searchStudents(@RequestParam String name) {
+        return studentService.searchStudentsByName(name);
     }
 
 }

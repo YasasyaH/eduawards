@@ -37,9 +37,9 @@
 
         <!-- Student Search -->
         <div class="mb-3">
-          <label for="studentName" class="form-label">Student</label>
+          <label for="id" class="form-label">Student</label>
           <div class="input-group">
-            <input type="text" class="form-control" id="studentName" readonly th:field="*{student.fullName}" />
+            <input type="text" class="form-control" id="id" readonly th:field="*{student.id}" />
             <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#studentSearchModal">Search</button>
           </div>
         </div>
@@ -124,6 +124,7 @@
         <table class="table table-bordered table-striped">
           <thead>
           <tr>
+            <th>Id</th>
             <th>Full Name</th>
             <th>Registration No</th>
             <th>Action</th>
@@ -145,11 +146,12 @@
   $('#studentSearchInput').on('keyup', function () {
       const keyword = $(this).val();
       if (keyword.length >= 2) {
-          $.get('/students/search', { name: keyword }, function (data) {
+          $.get('student/search', { name: keyword }, function (data) {
               let rows = '';
               data.forEach(s => {
                   rows += `
                       <tr>
+                          <td>${s.id}</td>
                           <td>${s.fullName}</td>
                           <td>${s.registrationNo}</td>
                           <td><button type="button" class="btn btn-sm btn-success" onclick='selectStudent(${JSON.stringify(s)})'>Select</button></td>
@@ -161,9 +163,9 @@
   });
 
   function selectStudent(student) {
-      $('#studentName').val(student.fullName);
+      $('#id').val(student.id);
       $('#registrationNo').val(student.registrationNo);
-      $('#fatherName').val(student.fatherName);
+      $('#fullName').val(student.fullName);
 
       // Hidden field for student ID
       $('<input>').attr({

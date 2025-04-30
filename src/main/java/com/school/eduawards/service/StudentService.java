@@ -31,4 +31,8 @@ public class StudentService {
     public List<Student> findByYearAndClass(int year, String className) {
         return repository.findByCurrentYearAndCurrentClass(year, className);
     }
+
+    public List<Student> searchStudentsByName(String name) {
+        return repository.findByFullNameContainingIgnoreCase(name);
+    }
 }

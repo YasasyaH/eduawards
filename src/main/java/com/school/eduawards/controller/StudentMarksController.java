@@ -28,6 +28,7 @@ public class StudentMarksController {
         model.addAttribute("studentMarks", new StudentMarks());
         model.addAttribute("yearList", yearDetailsService.getAll());
         model.addAttribute("semesterList", semesterDetailsService.getAll());
+        model.addAttribute("studentList", studentService.getAll());
         return "student-marks-form";
     }
 }

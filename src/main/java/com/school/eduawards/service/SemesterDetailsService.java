@@ -38,4 +38,10 @@ public class SemesterDetailsService {
     public void delete(Integer id) {
         semesterDetailsRepository.deleteById(id);
     }
+
+    public SemesterDetails findCurrentSemester() {
+        return semesterDetailsRepository.findByIsCurrentTrue()
+                .orElseThrow(() -> new RuntimeException("Current semester not found"));
+    }
+
 }

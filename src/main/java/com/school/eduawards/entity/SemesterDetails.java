@@ -30,6 +30,9 @@ public class SemesterDetails {
     private String description;
     private String status;
 
+    @Column(name = "is_current")
+    private Boolean isCurrent;
+
     @Column(name = "enter_date")
     private LocalDateTime enterDate;
 
