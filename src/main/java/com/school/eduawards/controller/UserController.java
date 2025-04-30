@@ -15,6 +15,7 @@ import java.util.List;
 @Controller
 @RequestMapping("/user")
 public class UserController {
+
     @Autowired
     private UserService userService;
 
@@ -49,8 +50,7 @@ public class UserController {
         model.addAttribute("userGroupList", userGroupList);
         model.addAttribute("user", user);
         model.addAttribute("userList", list);
-
-        return "user";
+        return "user-form";
     }
 
     @GetMapping("/delete/{id}")
@@ -58,5 +58,4 @@ public class UserController {
         userService.delete(id);
         return "redirect:/user";
     }
-
 }

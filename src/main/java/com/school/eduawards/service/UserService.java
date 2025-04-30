@@ -27,4 +27,8 @@ public class UserService {
     public void delete(Integer id) {
         repository.deleteById(id);
     }
+
+    public User findByUserNameAndPassword(String userName, String password) {
+        return repository.findByUserNameAndPassword(userName, password);
+    }
 }
