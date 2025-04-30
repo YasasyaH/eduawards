@@ -77,27 +77,23 @@ public class AttendanceController {
                                  @RequestParam("className") String className) {
 
         // Fetch yearDetails and semesterDetails
-        YearDetails yearDetails = yearDetailsService.getById(year);
-        SemesterDetails semesterDetails = semesterDetailsService.findCurrentSemester(); // assume you have this
+        YearDetails yearDetails = yearDetailsService.getById(1);
+        SemesterDetails semesterDetails = semesterDetailsService.findCurrentSemester();
 
-
-
-        // Current Month
         int month = LocalDateTime.now().getMonthValue();
 
-        // Group attendance by student
         Map<Integer, List<AttendanceRecord>> studentAttendanceMap = new HashMap<>();
 
         for (Map.Entry<String, String> entry : allParams.entrySet()) {
-            String key = entry.getKey(); // Example: attendance[2][15]
+            String key = entry.getKey();
             if (key.startsWith("attendance")) {
                 String[] parts = key.replaceAll("[^0-9]+", " ").trim().split(" ");
                 int studentId = Integer.parseInt(parts[0]);
                 int date = Integer.parseInt(parts[1]);
 
                 AttendanceRecord record = new AttendanceRecord();
-                record.setDate(String.format("%02d", date)); // '01', '02', etc.
-                record.setPresent(1); // Checkbox is checked = present
+                record.setDate(String.format("%02d", date));
+                record.setPresent(1);
 
                 studentAttendanceMap
                         .computeIfAbsent(studentId, k -> new ArrayList<>())

@@ -27,7 +27,7 @@ public class StudentMarks {
     @JoinColumn(name = "student_year", nullable = false)
     private YearDetails yearDetails;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "student_semester", nullable = false)
     private SemesterDetails semesterDetails;
 

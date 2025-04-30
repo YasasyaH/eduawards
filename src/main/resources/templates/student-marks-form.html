@@ -26,20 +26,66 @@
 <div class="container mt-5">
   <h2 class="mb-4">Student Marks Entry</h2>
 
+  <!-- Student Marks Table -->
+  <div class="card mb-5">
+    <div class="card-header bg-primary text-white">
+      <h5>Student Marks Records</h5>
+    </div>
+    <div class="card-body">
+      <table class="table table-bordered table-striped">
+        <thead>
+        <tr>
+          <th>Student Name</th>
+          <th>Registration No</th>
+          <th>Year</th>
+          <th>Semester</th>
+          <th>English</th>
+          <th>Maths</th>
+          <th>Science</th>
+          <th>Computer</th>
+          <th>Social Studies</th>
+          <th>Sinhala</th>
+          <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="mark : ${marksList}">
+          <td th:text="${mark.student.fullName}"></td>
+          <td th:text="${mark.student.registrationNo}"></td>
+          <td th:text="${#temporals.format(mark.yearDetails.startDate, 'yyyy')}"></td>
+          <td th:text="${#temporals.format(mark.semesterDetails.startDate, 'yyyy-MM')}"></td>
+          <td th:text="${mark.english}"></td>
+          <td th:text="${mark.maths}"></td>
+          <td th:text="${mark.science}"></td>
+          <td th:text="${mark.computer}"></td>
+          <td th:text="${mark.socialStudies}"></td>
+          <td th:text="${mark.sinhala}"></td>
+          <td>
+            <a th:href="@{/student-marks/edit/{id}(id=${mark.id})}" class="btn btn-sm btn-primary">Edit</a>
+            <a th:href="@{/student-marks/delete/{id}(id=${mark.id})}" class="btn btn-sm btn-danger"
+               onclick="return confirm('Are you sure you want to delete this record?');">Delete</a>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
   <!-- Form Section -->
   <div class="card form-section">
     <div class="card-header bg-primary text-white">
       <h5 th:text="${studentMarks.id} != null ? 'Edit Student Marks' : 'Add Student Marks'"></h5>
     </div>
     <div class="card-body">
-      <form th:action="@{/marks/save}" th:object="${studentMarks}" method="post">
-        <input type="hidden" th:field="*{id}" />
+      <form th:action="@{/student-marks/save}" th:object="${studentMarks}" method="post">
+        <input type="text" th:field="*{id}" />
 
         <!-- Student Search -->
         <div class="mb-3">
-          <label for="id" class="form-label">Student</label>
+          <label for="fullName" class="form-label">Student Name</label>
           <div class="input-group">
-            <input type="text" class="form-control" id="id" readonly th:field="*{student.id}" />
+            <input type="text" class="form-control" id="fullName" readonly th:field="*{student.fullName}" />
             <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#studentSearchModal">Search</button>
           </div>
         </div>
@@ -48,10 +94,6 @@
         <div class="mb-3">
           <label for="registrationNo" class="form-label">Registration No</label>
           <input type="text" class="form-control" id="registrationNo" readonly />
-        </div>
-        <div class="mb-3">
-          <label for="fullName" class="form-label">Full Name</label>
-          <input type="text" class="form-control" id="fullName" readonly />
         </div>
 
         <!-- Year Dropdown -->
@@ -163,7 +205,7 @@
   });
 
   function selectStudent(student) {
-      $('#id').val(student.id);
+      // $('#id').val(student.id);
       $('#registrationNo').val(student.registrationNo);
       $('#fullName').val(student.fullName);
 

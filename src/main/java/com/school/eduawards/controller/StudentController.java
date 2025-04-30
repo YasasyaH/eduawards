@@ -37,6 +37,9 @@ public class StudentController {
 
     @PostMapping("/save")
     public String saveUser(@ModelAttribute("student") Student student) {
+
+        System.out.println("**********Std year " + student.getCurrentYear());
+
         //if (student.getId() == 0){
            student.setEnterDate(LocalDateTime.now());
            student.setEnterUser("admin");

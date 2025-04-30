@@ -35,11 +35,11 @@
                 <div class="row mb-3">
                     <div class="col">
                         <label for="year" class="form-label">Grade (Year)</label>
-                        <input type="number" class="form-control" id="year" name="year" required th:value="${selectedYear}">
+                        <input type="number" class="form-control" id="year" name="year" required th:value="${selectedYear ?: 5}">
                     </div>
                     <div class="col">
                         <label for="className" class="form-label">Class</label>
-                        <input type="text" class="form-control" id="className" name="className" required th:value="${selectedClass}">
+                        <input type="text" class="form-control" id="className" name="className" required th:value="A">
                     </div>
                 </div>
                 <button type="submit" class="btn btn-success">Search</button>

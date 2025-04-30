@@ -35,8 +35,8 @@
     <form class="form-inline mb-3" method="get" th:action="@{/marks-dashboard}">
         <div class="row">
             <div class="col-md-3">
-                <label for="yearId" class="form-label">Year</label>
-                <select id="yearId" name="yearId" class="form-select" required>
+                <label for="yearIdIp" class="form-label">Year</label>
+                <select id="yearIdIp" name="yearIdIp" class="form-select" required>
                     <option value="">-- Select Year --</option>
                     <option th:each="y : ${years}"
                             th:value="${y.id}"
@@ -46,8 +46,8 @@
             </div>
 
             <div class="col-md-3">
-                <label for="semesterId" class="form-label">Semester</label>
-                <select id="semesterId" name="semesterId" class="form-select" required>
+                <label for="semesterIdIp" class="form-label">Semester</label>
+                <select id="semesterIdIp" name="semesterIdIp" class="form-select" required>
                     <option value="">-- Select Semester --</option>
                     <option th:each="s : ${semesters}"
                             th:value="${s.id}"
@@ -66,37 +66,7 @@
     <div class="tabs-container">
         <ul class="nav nav-tabs">
             <li class="nav-item">
-                <a class="nav-link"
-                   th:classappend="${selectedYear} == 1 ? 'active' : ''"
-                   th:href="@{/marks-dashboard(yearId=1, semesterId=${selectedSemester})}">
-                    Year 1
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link"
-                   th:classappend="${selectedYear} == 2 ? 'active' : ''"
-                   th:href="@{/marks-dashboard(yearId=2, semesterId=${selectedSemester})}">
-                    Year 2
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link"
-                   th:classappend="${selectedYear} == 3 ? 'active' : ''"
-                   th:href="@{/marks-dashboard(yearId=3, semesterId=${selectedSemester})}">
-                    Year 3
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link"
-                   th:classappend="${selectedYear} == 4 ? 'active' : ''"
-                   th:href="@{/marks-dashboard(yearId=4, semesterId=${selectedSemester})}">
-                    Year 4
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link"
-                   th:classappend="${selectedYear} == 5 ? 'active' : ''"
-                   th:href="@{/marks-dashboard(yearId=5, semesterId=${selectedSemester})}">
+                <a class="nav-link">
                     Year 5
                 </a>
             </li>

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
@@ -27,24 +28,36 @@ public class MarksDashboardController {
     @Autowired
     private SemesterDetailsService semesterDetailsService;
 
+    @GetMapping("/load-dashboard")
+    public String editSemesterDetails(@PathVariable Integer id, Model model) {
+        List<YearDetails> years = yearDetailsService.getAll();
+        List<SemesterDetails> semesters = semesterDetailsService.getAll();
+
+
+        model.addAttribute("years", years);
+        model.addAttribute("semesters", semesters);
+        return "dashboard";
+    }
+
     @GetMapping("/marks-dashboard")
-    public String viewDashboard(@RequestParam(value = "yearId", required = false) Integer yearId,
-                                @RequestParam(value = "semesterId", required = false) Integer semesterId,
+    public String viewDashboard(@RequestParam(value = "yearIdIp", required = false) Integer yearIdIp,
+                                @RequestParam(value = "semesterIdIp", required = false) Integer semesterIdIp,
                                 Model model) {
 
         List<YearDetails> years = yearDetailsService.getAll();
         List<SemesterDetails> semesters = semesterDetailsService.getAll();
 
+
         model.addAttribute("years", years);
         model.addAttribute("semesters", semesters);
-        model.addAttribute("selectedYear", yearId);
-        model.addAttribute("selectedSemester", semesterId);
+        model.addAttribute("selectedYear", yearIdIp);
+        model.addAttribute("selectedSemester", semesterIdIp);
 
-        if (yearId != null && semesterId != null) {
-            Map<String, StudentMarks> topStudents = marksService.getTopStudentsBySubject(yearId, semesterId);
-            model.addAttribute("topStudents", topStudents);
-        }
 
-        return "marks-dashboard";
+        Map<String, StudentMarks> topStudents = marksService.getTopStudentsBySubject(yearIdIp, semesterIdIp);
+        model.addAttribute("topStudents", topStudents);
+
+
+        return "dashboard";
     }
 }

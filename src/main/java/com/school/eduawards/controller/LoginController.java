@@ -3,6 +3,9 @@ package com.school.eduawards.controller;
 import com.school.eduawards.entity.YearDetails;
 import com.school.eduawards.service.SemesterDetailsService;
 import com.school.eduawards.service.YearDetailsService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,5 +35,10 @@ public class LoginController {
         model.addAttribute("years", list);
         model.addAttribute("semesters", semesterDetailsService.getAll());
         return "dashboard";
+    }
+
+    @GetMapping("/logout")
+    public String logout() {
+        return "login";
     }
 }
