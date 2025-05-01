@@ -1,6 +1,5 @@
 package com.school.eduawards.controller;
 
-import com.school.eduawards.dto.AttendanceRecord;
 import com.school.eduawards.entity.SemesterDetails;
 import com.school.eduawards.entity.Student;
 import com.school.eduawards.entity.StudentAttendance;
@@ -18,13 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDateTime;
-import java.time.YearMonth;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
+import java.util.*;
 
 @Controller
 @RequestMapping("/attendance")
@@ -57,11 +50,10 @@ public class AttendanceController {
 
         List<Student> students = studentService.findByYearAndClass(year, className);
 
-
-        YearMonth yearMonth = YearMonth.now();
-        List<Integer> dates = IntStream.rangeClosed(1, yearMonth.lengthOfMonth())
-                .boxed()
-                .collect(Collectors.toList());
+        List<Integer> dates = new ArrayList<>();
+        for (int i = 1; i <= 31; i++) {
+            dates.add(i);
+        }
 
         model.addAttribute("students", students);
         model.addAttribute("dates", dates);
@@ -76,13 +68,11 @@ public class AttendanceController {
                                  @RequestParam("year") int year,
                                  @RequestParam("className") String className) {
 
-        // Fetch yearDetails and semesterDetails
-        YearDetails yearDetails = yearDetailsService.getById(1);
-        SemesterDetails semesterDetails = semesterDetailsService.findCurrentSemester();
+
+        YearDetails yearDetails = yearDetailsService.getById(year);
+        SemesterDetails semesterDetails = semesterDetailsService.findById(1);
 
         int month = LocalDateTime.now().getMonthValue();
-
-        Map<Integer, List<AttendanceRecord>> studentAttendanceMap = new HashMap<>();
 
         for (Map.Entry<String, String> entry : allParams.entrySet()) {
             String key = entry.getKey();
@@ -91,42 +81,26 @@ public class AttendanceController {
                 int studentId = Integer.parseInt(parts[0]);
                 int date = Integer.parseInt(parts[1]);
 
-                AttendanceRecord record = new AttendanceRecord();
-                record.setDate(String.format("%02d", date));
-                record.setPresent(1);
+                boolean present = entry.getValue().equals("on");
 
-                studentAttendanceMap
-                        .computeIfAbsent(studentId, k -> new ArrayList<>())
-                        .add(record);
+                // Create and save the attendance record
+                StudentAttendance attendance = new StudentAttendance();
+                attendance.setYearDetails(yearDetailsService.getById(1));
+                attendance.setSemesterDetails(semesterDetails);
+                attendance.setStudent(studentService.getById(studentId));
+                attendance.setMonth(month);
+                attendance.setType("Monthly");
+                attendance.setStatus("Active");
+                attendance.setPresent(present);
+                attendance.setAttendanceDate(LocalDateTime.now());
+                attendance.setEnterDate(LocalDateTime.now());
+                attendance.setEnterUser("admin");
+
+                studentAttendanceService.save(attendance);
             }
         }
 
-        // Save Attendance for each student
-        for (Map.Entry<Integer, List<AttendanceRecord>> entry : studentAttendanceMap.entrySet()) {
-            Integer studentId = entry.getKey();
-            List<AttendanceRecord> records = entry.getValue();
-
-            // Save one StudentAttendance record per student
-            StudentAttendance attendance = new StudentAttendance();
-            attendance.setYearDetails(yearDetails);
-            attendance.setSemesterDetails(semesterDetails);
-            attendance.setMonth(month);
-            attendance.setType("Monthly"); // You can change if you want
-            attendance.setStatus("Active");
-
-            // Convert List<AttendanceRecord> to one AttendanceRecord
-            AttendanceRecord attendanceRecord = new AttendanceRecord();
-            attendanceRecord.setDate(LocalDateTime.now().toString());
-            attendanceRecord.setPresent(records.size());
-
-            attendance.setAttendanceRecord(attendanceRecord);
-            attendance.setEnterDate(LocalDateTime.now());
-            attendance.setEnterUser("admin"); // Or fetch logged in user
-
-            studentAttendanceService.save(attendance);
-        }
-
-        return "redirect:/attendance"; // Go back to page
+        return "redirect:/attendance"; // Go back to the page after saving attendance
     }
 
 }

@@ -1,13 +1,10 @@
 package com.school.eduawards.entity;
 
-import com.school.eduawards.dto.AttendanceRecord;
-import com.vladmihalcea.hibernate.type.json.JsonType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.Type;
 
 import java.time.LocalDateTime;
 
@@ -27,8 +24,12 @@ public class StudentAttendance {
     private YearDetails yearDetails;
 
     @ManyToOne
-    @JoinColumn(name = "semister_id", nullable = false)
+    @JoinColumn(name = "semester_id", nullable = false)
     private SemesterDetails semesterDetails;
+
+    @ManyToOne
+    @JoinColumn(name = "student_id", nullable = false)
+    private Student student;
 
     private int month;
 
@@ -36,10 +37,10 @@ public class StudentAttendance {
 
     private String status;
 
-    @Type(JsonType.class)
-    @Column(columnDefinition = "json")
-    private AttendanceRecord attendanceRecord;
+    private boolean present;
 
+    @Column(name = "attendance_date")
+    private LocalDateTime attendanceDate;
 
     @Column(name = "enter_date")
     private LocalDateTime enterDate;

@@ -55,6 +55,9 @@
             </div>
             <div class="card-body table-responsive">
                 <form th:action="@{/attendance/save}" method="post">
+                    <input type="hidden" name="year" th:value="${selectedYear}" />
+                    <input type="hidden" name="className" th:value="${selectedClass}" />
+
                     <table class="table table-bordered table-striped">
                         <thead>
                         <tr>
