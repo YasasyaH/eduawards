@@ -29,7 +29,7 @@ public class MarksDashboardController {
     private SemesterDetailsService semesterDetailsService;
 
     @GetMapping("/load-dashboard")
-    public String editSemesterDetails(@PathVariable Integer id, Model model) {
+    public String editSemesterDetails(Model model) {
         List<YearDetails> years = yearDetailsService.getAll();
         List<SemesterDetails> semesters = semesterDetailsService.getAll();
 
